@@ -2,6 +2,7 @@ import { useRef, useState, useLayoutEffect } from 'react'
 import { useScroll } from 'framer-motion'
 import FlightPath from './FlightPath'
 import Node from './Node'
+import EnvironmentLayer from './EnvironmentLayer'
 import { SCENE_HEIGHT, SCENE_NODES } from './sceneData'
 import './Field.css'
 
@@ -27,6 +28,7 @@ export default function Field() {
   return (
     <div ref={fieldRef} className="field" style={{ height: SCENE_HEIGHT }}>
       <FlightPath nodes={SCENE_NODES} width={fieldWidth} height={SCENE_HEIGHT} />
+      <EnvironmentLayer nodes={SCENE_NODES} fieldWidth={fieldWidth} />
       {SCENE_NODES.map((node) => (
         <Node key={node.id} node={node} fieldWidth={fieldWidth} scrollYProgress={scrollYProgress} />
       ))}

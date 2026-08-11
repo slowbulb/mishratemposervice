@@ -1,6 +1,5 @@
 import type { ComponentType } from 'react'
 import DefaultObject from './DefaultObject'
-import FailingTrampolinePlaceholder from './FailingTrampolinePlaceholder'
 import Rickshaw from './Rickshaw'
 
 export interface SceneObjectProps {
@@ -9,12 +8,10 @@ export interface SceneObjectProps {
 }
 
 // Maps track.object_key to the component that renders it in the field.
-// Phase 4: swap remaining placeholder entries for real layered-SVG
-// objects (chai cup, frozen radio, cigarette, ...) one at a time —
-// the field/scene logic never needs to change.
+// Every current track rides the rickshaw; _default is a fallback for
+// any future object_key that doesn't have real art yet.
 export const OBJECT_REGISTRY: Record<string, ComponentType<SceneObjectProps>> = {
   rickshaw: Rickshaw,
-  failing_trampoline: FailingTrampolinePlaceholder,
   _default: DefaultObject,
 }
 

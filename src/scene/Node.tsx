@@ -35,7 +35,7 @@ export default function Node({ node, fieldWidth, scrollYProgress }: NodeProps) {
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-        <div style={{ transform: `scale(${scale})` }}>
+        <div style={{ transform: `scale(${scale}) rotate(${node.headingDeg}deg)` }}>
           <ObjectComponent size={size} seed={node.index} />
         </div>
         <div className="node-label">
