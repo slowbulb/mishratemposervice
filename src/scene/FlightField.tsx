@@ -12,6 +12,7 @@ import NowPlaying from '../components/NowPlaying'
 import Starfield from '../components/Starfield'
 import { TRACK_INTERACTIONS } from '../interaction/interactionConfig'
 import { usePointerPosition } from '../interaction/usePointerPosition'
+import { useRamp } from '../interaction/useRamp'
 import BlackHoleCore from '../interaction/BlackHoleCore'
 import './FlightField.css'
 
@@ -43,37 +44,25 @@ export default function FlightField() {
   const interactionActive = Boolean(interaction) && audio.isPlaying
   const pointer = usePointerPosition(interactionActive)
 
-  // A black hole gets a fresh hidden target (screen-space, near viewport
-  // center where the current node always sits) each time you land on its
-  // track — found by moving the pointer near it, not shown otherwise.
-  const [blackHoleTarget, setBlackHoleTarget] = useState<{ x: number; y: number } | null>(null)
-  useEffect(() => {
-    if (interaction?.kind === 'blackhole') {
-      const angle = Math.random() * Math.PI * 2
-      const dist = 90 + Math.random() * 140
-      setBlackHoleTarget({
-        x: window.innerWidth / 2 + Math.cos(angle) * dist,
-        y: window.innerHeight / 2 + Math.sin(angle) * dist,
-      })
-    } else {
-      setBlackHoleTarget(null)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIndex])
+  // Black hole rides the cursor and spins up while it's alive.
+  const blackHoleLive = interactionActive && interaction.kind === 'blackhole' && Boolean(pointer)
+  const blackHoleIntensity = useRamp(blackHoleLive ? 1 : 0)
 
   let spotlight: { x: number; y: number; radius: number } | null = null
-  let blackHole: { x: number; y: number; captureRadius: number; proximity: number } | null = null
+  let blackHole: { x: number; y: number; captureRadius: number; intensity: number } | null = null
 
   if (interactionActive && pointer) {
     if (interaction.kind === 'twinkle') {
       spotlight = { x: pointer.x, y: pointer.y, radius: interaction.radius }
-    } else if (interaction.kind === 'blackhole' && blackHoleTarget) {
-      const dist = Math.hypot(pointer.x - blackHoleTarget.x, pointer.y - blackHoleTarget.y)
-      const influenceRadius = interaction.captureRadius * 2.6
-      const proximity = clamp(1 - dist / influenceRadius, 0, 1)
-      if (proximity > 0) {
-        blackHole = { x: blackHoleTarget.x, y: blackHoleTarget.y, captureRadius: interaction.captureRadius, proximity }
-      }
+    }
+  }
+
+  if (interaction?.kind === 'blackhole' && pointer && blackHoleIntensity > 0.01) {
+    blackHole = {
+      x: pointer.x,
+      y: pointer.y,
+      captureRadius: interaction.captureRadius,
+      intensity: blackHoleIntensity,
     }
   }
 
@@ -183,6 +172,10 @@ export default function FlightField() {
   const cameraX = size.width / 2 - currentNode.x * size.width
   const cameraY = size.height / 2 - currentNode.y
 
+  // Journey's end: the rickshaw settles onto the forest floor instead of
+  // hovering nose-first along the flight path.
+  const landed = currentNode.id === 'trk-immigrant'
+
   return (
     <div ref={viewportRef} className="flight-viewport">
       <Starfield spotlight={spotlight} blackHole={blackHole} />
@@ -213,10 +206,13 @@ export default function FlightField() {
         </motion.div>
       </motion.div>
 
-      {blackHole && <BlackHoleCore x={blackHole.x} y={blackHole.y} proximity={blackHole.proximity} />}
+      {blackHole && <BlackHoleCore x={blackHole.x} y={blackHole.y} intensity={blackHole.intensity} />}
 
       <div className="flight-rickshaw">
-        <motion.div animate={{ rotate: currentNode.headingDeg }} transition={CAMERA_TRANSITION}>
+        <motion.div
+          animate={{ rotate: landed ? 0 : currentNode.headingDeg, y: landed ? 120 : 0 }}
+          transition={CAMERA_TRANSITION}
+        >
           <Rickshaw size={140} seed={currentIndex} />
         </motion.div>
       </div>
