@@ -21,7 +21,7 @@ export interface BlackHoleField {
   x: number
   y: number
   captureRadius: number
-  proximity: number // 0..1, how close the pointer is to the hidden target
+  intensity: number // 0..1, ramps up the longer the hole stays alive
 }
 
 interface StarfieldProps {
@@ -63,13 +63,27 @@ export default function Starfield({ spotlight, blackHole }: StarfieldProps) {
         }
 
         if (blackHole) {
-          const dist = Math.hypot(px - blackHole.x, py - blackHole.y)
-          const influence = blackHole.captureRadius * 3
+          const dx = blackHole.x - px
+          const dy = blackHole.y - py
+          const dist = Math.hypot(dx, dy)
+          const influence = blackHole.captureRadius * 4.5
           if (dist < influence) {
-            const t = Math.min(1, (1 - dist / influence) * blackHole.proximity * 1.4)
-            const angle = Math.atan2(blackHole.y - py, blackHole.x - px)
-            const pullDist = Math.min(dist * 0.7, t * 60)
-            transform += ` translate(${(Math.cos(angle) * pullDist).toFixed(1)}px, ${(Math.sin(angle) * pullDist).toFixed(1)}px) scale(${Math.max(0.15, 1 - t * 0.85).toFixed(2)})`
+            // Falls off with the square of distance, so the grip tightens
+            // sharply near the horizon rather than dragging the whole sky.
+            const falloff = 1 - dist / influence
+            const t = Math.min(1, falloff * falloff * blackHole.intensity * 2.2)
+            const angle = Math.atan2(dy, dx)
+            // Swirl: pull inward while also rotating around the hole, so
+            // stars spiral in instead of falling straight down the well.
+            const swirl = t * 1.5
+            const pullDist = Math.min(dist * 0.92, dist * t * 1.1)
+            const tx = Math.cos(angle + swirl) * pullDist
+            const ty = Math.sin(angle + swirl) * pullDist
+            const stretch = 1 + t * 2.5 // spaghettification toward the hole
+            transform += ` translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px) rotate(${((angle * 180) / Math.PI).toFixed(1)}deg) scale(${stretch.toFixed(2)}, ${Math.max(0.1, 1 - t * 0.9).toFixed(2)})`
+            if (t > 0.25) {
+              filter = `drop-shadow(0 0 ${(t * 5).toFixed(1)}px rgba(242, 201, 76, ${(t * 0.8).toFixed(2)}))`
+            }
           }
         }
 

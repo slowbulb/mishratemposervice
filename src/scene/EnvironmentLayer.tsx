@@ -1,6 +1,8 @@
 import Wormhole from './environment/Wormhole'
 import GiantNebula from './environment/GiantNebula'
 import SpaceStorm from './environment/SpaceStorm'
+import ForestLanding from './environment/ForestLanding'
+import AtmosphereGradient from './environment/AtmosphereGradient'
 import type { SceneNode } from './sceneData'
 
 interface EnvironmentLayerProps {
@@ -15,9 +17,23 @@ export default function EnvironmentLayer({ nodes, fieldWidth }: EnvironmentLayer
   const goodbye = byId.get('trk-goodbye')
   const endIsNear = byId.get('trk-end-is-near')
   const storm = byId.get('trk-fg-dying')
+  const escape = byId.get('trk-escape-sequence')
+  const immigrant = byId.get('trk-immigrant')
 
   return (
     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}>
+      {/* re-entry: atmosphere thickens from the second-to-last leg down
+          to the landing site */}
+      {escape && immigrant && (
+        <AtmosphereGradient width={fieldWidth} startY={escape.y - 200} endY={immigrant.y + 120} />
+      )}
+
+      {immigrant && (
+        <div style={{ position: 'absolute', left: 0, top: immigrant.y - 200, width: fieldWidth, height: 620 }}>
+          <ForestLanding width={fieldWidth} />
+        </div>
+      )}
+
       {uTurn && goodbye && (
         <div
           style={{

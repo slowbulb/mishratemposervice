@@ -1,40 +1,109 @@
-.blackhole-wrap {
+.bh-wrap {
   position: fixed;
-  transform: translate(-50%, -50%);
   pointer-events: none;
-  z-index: 3;
+  /* above the rickshaw (z-index 5) — the hole should swallow whatever
+     it passes over, including the vehicle */
+  z-index: 8;
+  transform: translate(-50%, -50%);
+  transform-style: preserve-3d;
 }
 
-.blackhole-core {
+.bh-wrap > * {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
+}
+
+/* event horizon */
+.bh-core {
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%, #000 45%, rgba(0, 0, 0, 0) 72%);
+  background: #000;
+  box-shadow: 0 0 26px 8px rgba(0, 0, 0, 0.95);
 }
 
-.blackhole-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+/* gravitational lensing halo around the horizon */
+.bh-lens {
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent, #f2c94c, #7fd1e8, transparent 70%);
-  filter: blur(3px);
-  animation: blackhole-spin 3.5s linear infinite;
-  mask: radial-gradient(circle, transparent 55%, black 58%, black 62%, transparent 66%);
-  -webkit-mask: radial-gradient(circle, transparent 55%, black 58%, black 62%, transparent 66%);
+  background: radial-gradient(
+    circle,
+    transparent 40%,
+    rgba(142, 124, 195, 0.25) 46%,
+    rgba(127, 209, 232, 0.14) 54%,
+    transparent 68%
+  );
+  filter: blur(4px);
 }
 
-@keyframes blackhole-spin {
+/* bright photon ring hugging the horizon */
+.bh-photon-ring {
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid rgba(242, 201, 76, 0.9);
+  box-shadow:
+    0 0 14px rgba(242, 201, 76, 0.85),
+    inset 0 0 12px rgba(255, 217, 104, 0.6);
+  filter: blur(0.6px);
+}
+
+/* tilted accretion disc */
+.bh-disc {
+  transform: translate(-50%, -50%) rotate(-18deg);
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(242, 201, 76, 0.85) 60deg,
+    rgba(255, 138, 122, 0.9) 130deg,
+    rgba(127, 209, 232, 0.7) 220deg,
+    transparent 330deg
+  );
+  filter: blur(5px);
+  animation: bh-spin linear infinite;
+  mask: radial-gradient(ellipse, transparent 26%, black 40%, black 76%, transparent 92%);
+  -webkit-mask: radial-gradient(ellipse, transparent 26%, black 40%, black 76%, transparent 92%);
+}
+
+.bh-disc-back {
+  transform: translate(-50%, -50%) rotate(14deg);
+  animation-direction: reverse;
+  opacity: 0.7;
+}
+
+/* debris orbits */
+.bh-orbit {
+  border-radius: 50%;
+  animation: bh-orbit-spin linear infinite;
+  transform-style: preserve-3d;
+}
+
+.bh-debris {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #dde6ff;
+  box-shadow: 0 0 6px rgba(221, 230, 255, 0.9);
+}
+
+@keyframes bh-spin {
   to {
     transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
+/* orbits need their own keyframes to preserve the 3D tilt */
+@keyframes bh-orbit-spin {
+  to {
+    transform: translate(-50%, -50%) rotateX(72deg) rotateZ(360deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .blackhole-ring {
+  .bh-disc,
+  .bh-orbit {
     animation: none;
   }
 }
