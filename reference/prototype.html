@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Concept Album Storyboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --space: #050512;            /* deep space */
+    --space-2: #0C1030;          /* nebula depth */
+    --panel: rgba(15, 20, 48, 0.72);   /* card hull glass */
+    --panel-edge: rgba(146, 166, 255, 0.26);
+    --ink: #E8ECFF;              /* starlight text */
+    --ink-soft: #A9B3D9;
+    --gold: #F2C94C;             /* star gold */
+    --teal: #7FD1E8;             /* comet teal */
+    --violet: #8E7CC3;
+    --hairline: rgba(146, 166, 255, 0.16);
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'Instrument Sans', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; color: var(--ink);
+    background:
+      radial-gradient(900px 520px at 78% -8%, rgba(142,124,195,0.22), transparent 62%),
+      radial-gradient(760px 480px at 12% 108%, rgba(46,127,143,0.20), transparent 60%),
+      radial-gradient(1200px 700px at 50% 30%, var(--space-2), var(--space) 75%);
+    background-attachment: fixed;
+    font-family: var(--sans); padding-bottom: 96px;
+  }
+
+  /* ——— starfield ——— */
+  #sky { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  #sky span {
+    position: absolute; border-radius: 50%; background: #DDE6FF; opacity: .55;
+    animation: twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle { 0%,100% { opacity: .2; } 50% { opacity: .8; } }
+
+  header, main, .seqrail { position: relative; z-index: 1; }
+
+  header { max-width: 560px; margin: 0 auto; padding: 48px 24px 24px; border-bottom: 1px solid var(--hairline); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .22em; color: var(--teal); text-transform: uppercase; margin-bottom: 14px; }
+  .ghost { display: block; width: 100%; background: transparent; border: none; outline: none; color: var(--ink); }
+  #albumTitle { font-family: var(--serif); font-style: italic; font-size: clamp(34px, 6vw, 52px); line-height: 1.05; letter-spacing: -0.01em; text-shadow: 0 0 24px rgba(146,166,255,.25); }
+  #albumTitle::placeholder { color: rgba(232,236,255,.3); }
+  #artist { font-family: var(--mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-top: 10px; }
+  #artist::placeholder { color: rgba(242,201,76,.45); }
+  .toolbar { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+  .btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .08em; padding: 9px 16px;
+    border-radius: 999px; border: 1px solid rgba(146,166,255,.35); background: rgba(15,20,48,.5);
+    color: var(--ink); cursor: pointer; transition: border-color 120ms, color 120ms, background 120ms;
+  }
+  .btn:hover { border-color: var(--gold); color: var(--gold); }
+  .btn.solid { background: var(--gold); border-color: var(--gold); color: #14102A; font-weight: 500; }
+  .btn.solid:hover { background: #FFD968; color: #14102A; }
+  .btn:focus-visible, .grip:focus-visible, .nudge:focus-visible, .del:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  main { max-width: 560px; margin: 22px auto 0; padding: 0 24px; }
+  .empty { text-align: center; padding: 64px 20px; color: var(--teal); font-family: var(--mono); font-size: 13px; }
+
+  .gap { height: 10px; transition: height 120ms ease; display: flex; align-items: center; }
+  .gap.active { height: 54px; }
+  .gap .line { display: none; width: 100%; height: 3px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); box-shadow: 0 0 14px rgba(242,201,76,.6); }
+  .gap.active .line { display: block; }
+
+  /* ——— track cards: hull modules on a flight path ——— */
+  .cardEl {
+    display: flex; background: var(--panel); color: var(--ink); border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--panel-edge);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 0 0 1px rgba(5,5,18,.6), 0 18px 40px -20px rgba(0,0,0,.9), inset 0 1px 0 rgba(232,236,255,.06);
+    transition: transform 130ms ease, opacity 130ms ease, border-color 130ms ease;
+  }
+  .cardEl:hover { border-color: rgba(146,166,255,.45); }
+  .cardEl.lifting { opacity: .45; transform: scale(.995); }
+
+  .spine {
+    width: 48px; flex: 0 0 48px;
+    background: linear-gradient(180deg, rgba(146,166,255,.10), rgba(146,166,255,.03));
+    border-right: 1px dashed rgba(146,166,255,.28);
+    display: flex; flex-direction: column; align-items: center; padding: 10px 0 8px; gap: 8px;
+  }
+  .trackno {
+    font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--ink);
+    width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--teal); box-shadow: 0 0 10px rgba(127,209,232,.35), inset 0 0 6px rgba(127,209,232,.18);
+  }
+  .grip { flex: 1; width: 100%; border: none; background: transparent; cursor: grab; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+  .grip:active { cursor: grabbing; }
+  .grip span { display: block; width: 16px; height: 2px; background: rgba(169,179,217,.55); border-radius: 2px; }
+  .grip:hover span { background: var(--gold); }
+  .nudges { display: flex; flex-direction: column; gap: 4px; }
+  .nudge { border: none; background: transparent; color: var(--ink-soft); font-size: 13px; cursor: pointer; line-height: 1; padding: 3px 8px; border-radius: 4px; }
+  .nudge:hover:not(:disabled) { color: var(--ink); background: rgba(146,166,255,.12); }
+  .nudge:disabled { opacity: .25; cursor: default; }
+
+  .body { flex: 1; padding: 12px 14px 8px; min-width: 0; }
+  .ttitle { width: 100%; border: none; outline: none; background: transparent; font-family: var(--serif); font-size: 18px; color: var(--ink); padding: 0 0 4px; border-bottom: 1px solid transparent; text-align: center; }
+  .ttitle:focus { border-bottom-color: var(--gold); }
+  .ttitle::placeholder { color: rgba(169,179,217,.5); }
+  .prose { width: 100%; border: none; outline: none; background: transparent; resize: none; font-family: var(--sans); font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); margin-top: 6px; overflow: hidden; text-align: center; }
+  .prose::placeholder { color: rgba(169,179,217,.45); font-style: italic; }
+  .prose:focus { color: var(--ink); }
+  .cardfoot { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(146,166,255,.22); }
+  .mono { font-family: var(--mono); font-size: 9px; letter-spacing: .18em; color: rgba(169,179,217,.75); }
+  .del { border: none; background: transparent; color: rgba(169,179,217,.7); font-family: var(--mono); font-size: 11px; cursor: pointer; padding: 3px 6px; border-radius: 4px; }
+  .del:hover { color: #FF8A7A; background: rgba(255,138,122,.1); }
+
+  .savenote { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; color: rgba(169,179,217,.55); margin-top: 12px; text-transform: uppercase; }
+
+  /* ——— view/edit lock ——— */
+  .editonly { display: contents; }
+  body.locked .editonly { display: none; }
+  body.locked .grip { display: none; }              /* no drag handle */
+  body.locked .nudges { display: none; }            /* no reorder arrows */
+  body.locked .del { display: none; }               /* no remove */
+  body.locked .spine { justify-content: center; }
+  body.locked .seqrail { pointer-events: none; opacity: .5; }  /* sequences view-only */
+  body.locked #lockBtn { border-color: var(--panel-edge); }
+  body.locked .ttitle, body.locked .prose, body.locked #albumTitle, body.locked #artist { cursor: default; }
+  body.locked .cardEl { cursor: default; }
+
+  /* ——— sequence rail ——— */
+  .seqrail {
+    position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 10px; z-index: 10;
+  }
+  .seqbtn {
+    width: 42px; height: 42px; border-radius: 50%;
+    font-family: var(--mono); font-size: 14px; font-weight: 500;
+    border: 1px solid rgba(146,166,255,.4); background: rgba(15,20,48,.75); color: var(--ink);
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    cursor: pointer; transition: border-color 120ms, color 120ms, background 120ms, box-shadow 120ms;
+  }
+  .seqbtn:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+  .seqbtn:disabled { opacity: .25; cursor: default; }
+  .seqbtn.current { background: var(--gold); border-color: var(--gold); color: #14102A; box-shadow: 0 0 16px rgba(242,201,76,.5); }
+  .seqbtn.armed {
+    border-color: var(--gold); color: var(--gold);
+    box-shadow: 0 0 0 0 rgba(242,201,76,.5);
+    animation: armpulse 1.6s ease-out infinite;
+  }
+  @keyframes armpulse {
+    0% { box-shadow: 0 0 0 0 rgba(242,201,76,.45); }
+    70% { box-shadow: 0 0 0 9px rgba(242,201,76,0); }
+    100% { box-shadow: 0 0 0 0 rgba(242,201,76,0); }
+  }
+  .seqbtn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  @media (max-width: 720px) {
+    .seqrail { right: 6px; gap: 7px; }
+    .seqbtn { width: 34px; height: 34px; font-size: 12px; }
+  }
+  @media (max-width: 560px) { .spine { width: 44px; flex-basis: 44px; } .body { padding: 12px 12px 8px; } }
+  @media (prefers-reduced-motion: reduce) {
+    .cardEl, .btn, .gap, .seqbtn { transition: none !important; }
+    .seqbtn.armed { animation: none; }
+    #sky span { animation: none; opacity: .5; }
+  }
+</style>
+</head>
+<body>
+
+<div id="sky" aria-hidden="true"></div>
+
+<header>
+  <div class="eyebrow" id="eyebrow">Story reel</div>
+  <input class="ghost" id="albumTitle" placeholder="Album title" aria-label="Album title" />
+  <input class="ghost" id="artist" placeholder="Artist name" aria-label="Artist name" />
+  <div class="toolbar">
+    <button class="btn" id="lockBtn">🔒 Unlock editing</button>
+    <span class="editonly">
+      <button class="btn solid" id="addEnd">+ Add track</button>
+      <button class="btn" id="addTop">+ Add at top</button>
+      <button class="btn" id="saveBtn">Save file</button>
+      <button class="btn" id="loadBtn">Load file</button>
+    </span>
+    <button class="btn" id="copyBtn">Copy outline</button>
+    <button class="btn" id="linerBtn">Export liner notes</button>
+    <input type="file" id="loadInput" accept=".json,application/json" style="display:none" />
+  </div>
+  <div class="savenote" id="savenote"></div>
+</header>
+
+<main id="reel"></main>
+
+<nav class="seqrail" aria-label="Sequence slots">
+  <button class="seqbtn" data-slot="A" title="Original sequence">A</button>
+  <button class="seqbtn" data-slot="B" title="Narrative sequence">B</button>
+  <button class="seqbtn" data-slot="C" title="Empty — rearrange tracks to unlock" disabled>C</button>
+  <button class="seqbtn" data-slot="D" title="Empty — rearrange tracks to unlock" disabled>D</button>
+</nav>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ————— state ————— */
+  let idCounter = 100;
+  const nid = () => "t" + (idCounter++);
+
+  /* ————— view/edit lock (deterrent only — not real security) —————
+     The page loads locked/read-only. Unlock reveals editing.
+     To change the password, edit PASSWORD below. This check runs in the
+     browser and is visible to anyone who inspects the code; it keeps
+     casual visitors from editing, nothing more. Real protection needs
+     a server (see project brief: Supabase auth). */
+  const PASSWORD = "album2026";
+  let locked = true;
+
+  let state = {
+    albumTitle: "Untitled Concept Album — Act I",
+    artist: "",
+    tracks: [
+      { id: "trk-sea", title: "The Sea Is a Failing Trampoline",
+        prose: "Come out, come out of the estuary\nO great giant run with me\n\nEveryone that you know\nHas come out for the show\n\nThe sea is a failing trampoline\nJump!" },
+      { id: "trk-morning", title: "Miss the Morning Light",
+        prose: "Miss the morning light\nMiss the fire on the stove\nMiss the freezing moon\nMiss the winter at its cusp\n\nMiss the morning light\nMiss the fire off the cuff\nMiss the Tolkien moon\n\nMiss the world inside your head\n\nFloating up\nFloating on up\nAs I wave goodbye to thrust\n\nMeet me in the wild\nMeet me in the…\n[What about the paid / what the fuxk is that — unresolved]" },
+      { id: "trk-mining", title: "Space Mining Our Own Business",
+        prose: "Freezing out here\nI do not have water\nI do not have space supplies\n\nI do not have a cigarette\nI miss human connection\nI miss your web of lies\n\nBadle ki chingaariyan\nDun antarikh me gaaliyan\n\nWe will settle in the lumpsum baby\nWe'll make a lot of money\n\nBadle ki chingaariyan\nDun antarikh me gaaliyan\n\nWe will settle at the tombstone baby\nWe'll make a lot of money\n\nJust space mining our own business" },
+      { id: "trk-station", title: "Chillin' Out on a Space Station",
+        prose: "Chillin' out on a space station\nChillin' out in a cool fashion\nWhen the time comes\nThen we see what's to be done\n\nCrowbar, murder weapon\nUsed to fix the station\nHandy in a situation\nDo not use for computation\n\nChillin' out on the space station\nChilling out, conversation\nLeave me breathless\nThe view leaves us breathless\n\nClose, closer\nIn an ocean\n\n[Something something — still figuring the mumbles]" },
+      { id: "trk-ghar", title: "Ghar Chalo!",
+        prose: "Antariksh yaan ko\nU-turn karke\nGhar ki disha me\nKyon nahi chalte\n\nEngine me bhi aag lagi hai\n\nGhar chalo!\nGhar chalo!" },
+      { id: "trk-andromeda", title: "Andromeda Blush",
+        prose: "I know my name\nIs blaksshchinchana\nI think my name\nIs blasthuchaih\n\nI fly… lightspeed alone\n\nAndromeda blush\nAndromeda, andromeda blush" }
+    ],
+    slots: { C: null, D: null }
+  };
+
+  /* ————— preset sequences ————— */
+  const PRESETS = {
+    A: ["trk-mining", "trk-ghar", "trk-station", "trk-andromeda", "trk-morning", "trk-sea"],   // original paste order
+    B: ["trk-sea", "trk-morning", "trk-mining", "trk-station", "trk-ghar", "trk-andromeda"]    // narrative order
+  };
+
+  /* ————— autosave (guarded: no-ops where storage is unavailable) ————— */
+  const STORE_KEY = "concept-album-storyboard-v1";
+  function persist() {
+    try { window.localStorage.setItem(STORE_KEY, JSON.stringify(state)); setNote("Autosaved locally"); }
+    catch (e) { setNote("Autosave unavailable here — use Save file"); }
+  }
+  function restore() {
+    try {
+      const raw = window.localStorage.getItem(STORE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.tracks)) {
+          state = parsed;
+          if (!state.slots || typeof state.slots !== "object") state.slots = { C: null, D: null };
+          if (!("C" in state.slots)) state.slots.C = null;
+          if (!("D" in state.slots)) state.slots.D = null;
+          // keep id counter ahead of any restored ids
+          state.tracks.forEach(t => {
+            const n = parseInt(String(t.id).replace(/\D/g, ""), 10);
+            if (!isNaN(n) && n >= idCounter) idCounter = n + 1;
+          });
+        }
+      }
+    } catch (e) { /* fresh start */ }
+  }
+  let noteTimer = null;
+  function setNote(msg) {
+    const el = document.getElementById("savenote");
+    el.textContent = msg;
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(() => { el.textContent = ""; }, 2200);
+  }
+
+  /* ————— rendering ————— */
+  const reel = document.getElementById("reel");
+  const titleInput = document.getElementById("albumTitle");
+  const artistInput = document.getElementById("artist");
+  const eyebrow = document.getElementById("eyebrow");
+
+  let dragId = null;
+  let overGap = null;
+  let dragArmed = false;
+
+  function autosize(ta) { ta.style.height = "auto"; ta.style.height = ta.scrollHeight + "px"; }
+
+  function makeGap(gapIndex) {
+    const gap = document.createElement("div");
+    gap.className = "gap";
+    gap.dataset.gap = gapIndex;
+    const line = document.createElement("div");
+    line.className = "line";
+    gap.appendChild(line);
+    gap.addEventListener("dragover", (e) => { e.preventDefault(); setOverGap(gapIndex); });
+    return gap;
+  }
+
+  function setOverGap(g) {
+    if (overGap === g) return;
+    overGap = g;
+    document.querySelectorAll(".gap").forEach(el => {
+      el.classList.toggle("active", dragId !== null && Number(el.dataset.gap) === g);
+    });
+  }
+
+  function render() {
+    eyebrow.textContent = "Flight log · " + state.tracks.length + " track" + (state.tracks.length === 1 ? "" : "s");
+    titleInput.value = state.albumTitle;
+    artistInput.value = state.artist;
+    reel.innerHTML = "";
+
+    if (state.tracks.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "The reel is empty. Add a track to begin the story.";
+      reel.appendChild(empty);
+      if (typeof renderRail === "function") renderRail();
+      return;
+    }
+
+    reel.appendChild(makeGap(0));
+
+    state.tracks.forEach((t, i) => {
+      const card = document.createElement("article");
+      card.className = "cardEl";
+      card.draggable = true;
+      if (t.id === dragId) card.classList.add("lifting");
+
+      card.addEventListener("dragstart", (e) => {
+        if (!dragArmed) { e.preventDefault(); return; }
+        dragId = t.id;
+        card.classList.add("lifting");
+        e.dataTransfer.effectAllowed = "move";
+        try { e.dataTransfer.setData("text/plain", t.id); } catch (err) {}
+      });
+      card.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        const r = card.getBoundingClientRect();
+        setOverGap(e.clientY < r.top + r.height / 2 ? i : i + 1);
+      });
+
+      /* spine */
+      const spine = document.createElement("div");
+      spine.className = "spine";
+
+      const no = document.createElement("div");
+      no.className = "trackno";
+      no.textContent = String(i + 1).padStart(2, "0");
+
+      const grip = document.createElement("button");
+      grip.className = "grip";
+      grip.title = "Drag to reorder";
+      grip.setAttribute("aria-label", "Drag track " + (i + 1));
+      for (let s = 0; s < 3; s++) grip.appendChild(document.createElement("span"));
+      grip.addEventListener("mousedown", () => { dragArmed = true; });
+      grip.addEventListener("mouseup", () => { dragArmed = false; });
+      grip.addEventListener("touchstart", () => { dragArmed = true; }, { passive: true });
+
+      const nudges = document.createElement("div");
+      nudges.className = "nudges";
+      const up = document.createElement("button");
+      up.className = "nudge"; up.textContent = "↑"; up.disabled = i === 0;
+      up.setAttribute("aria-label", "Move up");
+      up.addEventListener("click", () => { swap(i, i - 1); });
+      const down = document.createElement("button");
+      down.className = "nudge"; down.textContent = "↓"; down.disabled = i === state.tracks.length - 1;
+      down.setAttribute("aria-label", "Move down");
+      down.addEventListener("click", () => { swap(i, i + 1); });
+      nudges.appendChild(up); nudges.appendChild(down);
+
+      spine.appendChild(no); spine.appendChild(grip); spine.appendChild(nudges);
+
+      /* body */
+      const body = document.createElement("div");
+      body.className = "body";
+
+      const tt = document.createElement("input");
+      tt.className = "ttitle";
+      tt.placeholder = "Track title";
+      tt.value = t.title;
+      tt.readOnly = locked;
+      tt.addEventListener("input", () => { t.title = tt.value; persistSoon(); });
+
+      const prose = document.createElement("textarea");
+      prose.className = "prose";
+      prose.placeholder = "What happens in this movement of the story…";
+      prose.rows = 2;
+      prose.value = t.prose;
+      prose.readOnly = locked;
+      prose.addEventListener("input", () => { t.prose = prose.value; autosize(prose); persistSoon(); });
+
+      const foot = document.createElement("div");
+      foot.className = "cardfoot";
+      const label = document.createElement("span");
+      label.className = "mono";
+      label.textContent = "SIDE " + (i < Math.ceil(state.tracks.length / 2) ? "A" : "B") + " · TR " + (i + 1);
+      const del = document.createElement("button");
+      del.className = "del"; del.textContent = "Remove";
+      del.addEventListener("click", () => {
+        state.tracks = state.tracks.filter(x => x.id !== t.id);
+        render(); persist();
+      });
+      foot.appendChild(label); foot.appendChild(del);
+
+      body.appendChild(tt); body.appendChild(prose); body.appendChild(foot);
+      card.appendChild(spine); card.appendChild(body);
+      reel.appendChild(card);
+      autosize(prose);
+
+      reel.appendChild(makeGap(i + 1));
+    });
+
+    if (typeof renderRail === "function") renderRail();
+  }
+
+  function swap(i, j) {
+    if (j < 0 || j >= state.tracks.length) return;
+    const c = state.tracks;
+    [c[i], c[j]] = [c[j], c[i]];
+    render(); persist();
+  }
+
+  function endDrag() {
+    dragArmed = false;
+    if (dragId !== null && overGap !== null) {
+      const fromIdx = state.tracks.findIndex(t => t.id === dragId);
+      if (fromIdx !== -1) {
+        const item = state.tracks[fromIdx];
+        const without = state.tracks.filter(t => t.id !== dragId);
+        let insertAt = overGap;
+        if (fromIdx < overGap) insertAt = overGap - 1;
+        insertAt = Math.max(0, Math.min(without.length, insertAt));
+        without.splice(insertAt, 0, item);
+        state.tracks = without;
+      }
+    }
+    dragId = null; overGap = null;
+    render(); persist();
+  }
+
+  document.body.addEventListener("drop", (e) => { e.preventDefault(); endDrag(); });
+  document.body.addEventListener("dragend", endDrag);
+  document.body.addEventListener("dragover", (e) => e.preventDefault());
+
+  /* ————— toolbar ————— */
+  let persistTimer = null;
+  function persistSoon() { clearTimeout(persistTimer); persistTimer = setTimeout(persist, 500); }
+
+  titleInput.addEventListener("input", () => { state.albumTitle = titleInput.value; persistSoon(); });
+  artistInput.addEventListener("input", () => { state.artist = artistInput.value; persistSoon(); });
+
+  document.getElementById("addEnd").addEventListener("click", () => {
+    state.tracks.push({ id: nid(), title: "", prose: "" });
+    render(); persist();
+  });
+  document.getElementById("addTop").addEventListener("click", () => {
+    state.tracks.unshift({ id: nid(), title: "", prose: "" });
+    render(); persist();
+  });
+
+  function buildOutline() {
+    return state.albumTitle.toUpperCase() + "\n" + state.artist + "\n\n" +
+      state.tracks.map((t, i) =>
+        String(i + 1).padStart(2, "0") + ". " + (t.title || "Untitled") + "\n" + (t.prose || "—")
+      ).join("\n\n");
+  }
+
+  function showCopyOverlay(text) {
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "position:fixed;inset:0;z-index:100;background:rgba(5,5,18,.85);display:flex;align-items:center;justify-content:center;padding:20px;";
+    const panel = document.createElement("div");
+    panel.style.cssText = "background:#0C1030;border:1px solid rgba(146,166,255,.35);border-radius:10px;max-width:560px;width:100%;max-height:80vh;display:flex;flex-direction:column;padding:16px;gap:10px;";
+    const hint = document.createElement("div");
+    hint.style.cssText = "font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#7FD1E8;text-transform:uppercase;";
+    hint.textContent = "Text selected — press Ctrl+C (Cmd+C on Mac), then close";
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.readOnly = true;
+    ta.style.cssText = "flex:1;min-height:280px;background:transparent;color:#E8ECFF;border:1px solid rgba(146,166,255,.2);border-radius:6px;padding:10px;font-family:'Instrument Sans',sans-serif;font-size:13px;line-height:1.5;resize:none;outline:none;";
+    const close = document.createElement("button");
+    close.textContent = "Close";
+    close.className = "btn";
+    close.addEventListener("click", () => wrap.remove());
+    wrap.addEventListener("click", (e) => { if (e.target === wrap) wrap.remove(); });
+    panel.appendChild(hint); panel.appendChild(ta); panel.appendChild(close);
+    wrap.appendChild(panel);
+    document.body.appendChild(wrap);
+    ta.focus(); ta.select();
+  }
+
+  function legacyCopy(text) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.cssText = "position:fixed;left:-9999px;top:0;";
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    ta.remove();
+    return ok;
+  }
+
+  document.getElementById("copyBtn").addEventListener("click", async function () {
+    const text = buildOutline();
+    const btn = this;
+    const flash = () => { btn.textContent = "Copied ✓"; setTimeout(() => { btn.textContent = "Copy outline"; }, 1600); };
+
+    if (navigator.clipboard && window.isSecureContext) {
+      try { await navigator.clipboard.writeText(text); flash(); return; } catch (e) { /* fall through */ }
+    }
+    if (legacyCopy(text)) { flash(); return; }
+    showCopyOverlay(text);
+  });
+
+  document.getElementById("saveBtn").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    const safe = (state.albumTitle || "album").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    a.download = (safe || "album") + "-storyboard.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+    setNote("Saved to your downloads");
+  });
+
+  const loadInput = document.getElementById("loadInput");
+  document.getElementById("loadBtn").addEventListener("click", () => loadInput.click());
+  loadInput.addEventListener("change", () => {
+    const file = loadInput.files && loadInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        if (!parsed || !Array.isArray(parsed.tracks)) throw new Error("bad format");
+        state = {
+          albumTitle: String(parsed.albumTitle || ""),
+          artist: String(parsed.artist || ""),
+          tracks: parsed.tracks.map(t => ({ id: nid(), title: String(t.title || ""), prose: String(t.prose || "") }))
+        };
+        render(); persist();
+        setNote("Loaded " + file.name);
+      } catch (e) { setNote("Couldn't read that file — expected a saved storyboard .json"); }
+    };
+    reader.readAsText(file);
+    loadInput.value = "";
+  });
+
+  /* ————— sequence rail ————— */
+  const railBtns = Array.from(document.querySelectorAll(".seqbtn"));
+
+  const currentSeq = () => state.tracks.map(t => t.id);
+  const seqEq = (a, b) => Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((v, i) => v === b[i]);
+
+  function slotSeq(name) {
+    if (name === "A" || name === "B") return PRESETS[name];
+    return state.slots[name]; // C / D — null when empty
+  }
+
+  function applySequence(ids) {
+    const byId = {};
+    state.tracks.forEach(t => { byId[t.id] = t; });
+    const ordered = ids.filter(id => byId[id]).map(id => byId[id]);
+    const leftovers = state.tracks.filter(t => !ids.includes(t.id));
+    state.tracks = ordered.concat(leftovers);
+    render(); persist();
+  }
+
+  function renderRail() {
+    const cur = currentSeq();
+    const anyMatch = ["A", "B", "C", "D"].some(n => seqEq(slotSeq(n), cur));
+    let armed = null;
+    if (!anyMatch) armed = state.slots.C === null ? "C" : (state.slots.D === null ? "D" : null);
+
+    railBtns.forEach(btn => {
+      const name = btn.dataset.slot;
+      const seq = slotSeq(name);
+      const isCurrent = seqEq(seq, cur);
+      const isEmpty = (name === "C" || name === "D") && seq === null;
+
+      btn.classList.toggle("current", isCurrent);
+      btn.classList.toggle("armed", name === armed);
+      btn.disabled = isEmpty && name !== armed;
+
+      if (name === "A") btn.title = "Original sequence";
+      else if (name === "B") btn.title = "Narrative sequence";
+      else if (isEmpty && name === armed) btn.title = "Save current sequence to " + name;
+      else if (isEmpty) btn.title = "Empty — rearrange tracks to unlock";
+      else btn.title = "Recall sequence " + name;
+    });
+  }
+
+  railBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (locked) return; // sequences are view-only when locked
+      const name = btn.dataset.slot;
+      const seq = slotSeq(name);
+      if (seq) {
+        applySequence(seq);
+        setNote("Sequence " + name + " applied");
+      } else if ((name === "C" || name === "D") && !btn.disabled) {
+        state.slots[name] = currentSeq();
+        persist(); renderRail();
+        setNote("Current sequence saved to " + name);
+      }
+    });
+  });
+
+  /* ————— liner notes export ————— */
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function buildLinerNotes() {
+    const tracksHtml = state.tracks.map((t, i) => `
+      <section class="track">
+        <div class="ring">${String(i + 1).padStart(2, "0")}</div>
+        <h2>${esc(t.title) || "Untitled"}</h2>
+        <div class="lyrics">${esc(t.prose).replace(/\n/g, "<br>")}</div>
+      </section>`).join("\n");
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>${esc(state.albumTitle)} — Liner Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; color: #E8ECFF;
+    background:
+      radial-gradient(900px 520px at 78% -8%, rgba(142,124,195,.22), transparent 62%),
+      radial-gradient(760px 480px at 12% 108%, rgba(46,127,143,.2), transparent 60%),
+      radial-gradient(1200px 700px at 50% 30%, #0C1030, #050512 75%);
+    background-attachment: fixed;
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    padding: 0 20px 90px;
+  }
+  #sky { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  #sky span { position: absolute; border-radius: 50%; background: #DDE6FF; opacity: .55; animation: tw 4s ease-in-out infinite; }
+  @keyframes tw { 0%,100% { opacity: .2; } 50% { opacity: .8; } }
+  .sheet { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; }
+  header { text-align: center; padding: 72px 0 44px; border-bottom: 1px solid rgba(146,166,255,.16); }
+  .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .26em; color: #7FD1E8; text-transform: uppercase; margin-bottom: 16px; }
+  h1 { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; font-size: clamp(36px, 8vw, 54px); line-height: 1.05; margin: 0; text-shadow: 0 0 26px rgba(146,166,255,.3); }
+  .artist { font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #F2C94C; margin-top: 14px; }
+  .track { text-align: center; padding: 52px 0 8px; }
+  .ring {
+    width: 34px; height: 34px; margin: 0 auto 16px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500;
+    border: 1px solid #7FD1E8; box-shadow: 0 0 12px rgba(127,209,232,.4), inset 0 0 7px rgba(127,209,232,.2);
+  }
+  h2 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 24px; margin: 0 0 18px; }
+  .lyrics { font-size: 14.5px; line-height: 1.8; color: #A9B3D9; }
+  footer { text-align: center; padding-top: 64px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .22em; color: rgba(169,179,217,.5); text-transform: uppercase; }
+  @media (prefers-reduced-motion: reduce) { #sky span { animation: none; opacity: .5; } }
+</style>
+</head>
+<body>
+<div id="sky" aria-hidden="true"></div>
+<div class="sheet">
+  <header>
+    <div class="eyebrow">Liner notes · ${state.tracks.length} track${state.tracks.length === 1 ? "" : "s"}</div>
+    <h1>${esc(state.albumTitle) || "Untitled"}</h1>
+    <div class="artist">${esc(state.artist)}</div>
+  </header>
+${tracksHtml}
+  <footer>End of side ${state.tracks.length > 1 ? "B" : "A"} · thank you for listening</footer>
+</div>
+<script>
+  (function () {
+    var sky = document.getElementById("sky");
+    for (var i = 0; i < 120; i++) {
+      var s = document.createElement("span");
+      s.style.left = (Math.random() * 100) + "%";
+      s.style.top = (Math.random() * 100) + "%";
+      var z = Math.random() < 0.85 ? 1 : 2;
+      s.style.width = s.style.height = z + "px";
+      s.style.animationDelay = (Math.random() * 6).toFixed(2) + "s";
+      s.style.animationDuration = (3 + Math.random() * 5).toFixed(2) + "s";
+      sky.appendChild(s);
+    }
+  })();
+<\/script>
+</body>
+</html>`;
+  }
+
+  document.getElementById("linerBtn").addEventListener("click", () => {
+    const blob = new Blob([buildLinerNotes()], { type: "text/html" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    const safe = (state.albumTitle || "album").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    a.download = (safe || "album") + "-liner-notes.html";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+    setNote("Liner notes exported — send that file to anyone");
+  });
+
+  /* ————— lock application ————— */
+  const lockBtn = document.getElementById("lockBtn");
+
+  function applyLock() {
+    document.body.classList.toggle("locked", locked);
+    titleInput.readOnly = locked;
+    artistInput.readOnly = locked;
+    lockBtn.textContent = locked ? "🔒 Unlock editing" : "🔓 Lock (read-only)";
+    lockBtn.title = locked ? "Enter password to edit" : "Return to read-only view";
+    render(); // re-render so per-card readonly/affordances update
+  }
+
+  lockBtn.addEventListener("click", () => {
+    if (locked) {
+      const entry = window.prompt("Enter edit password:");
+      if (entry === null) return;            // cancelled
+      if (entry === PASSWORD) {
+        locked = false;
+        applyLock();
+        setNote("Editing unlocked");
+      } else {
+        setNote("Incorrect password");
+      }
+    } else {
+      locked = true;
+      applyLock();
+      setNote("Back to read-only");
+    }
+  });
+
+  /* ————— boot ————— */
+  (function makeStars() {
+    const sky = document.getElementById("sky");
+    if (!sky) return;
+    for (let i = 0; i < 140; i++) {
+      const st = document.createElement("span");
+      st.style.left = (Math.random() * 100) + "%";
+      st.style.top = (Math.random() * 100) + "%";
+      const sz = Math.random() < 0.85 ? 1 : 2;
+      st.style.width = st.style.height = sz + "px";
+      st.style.animationDelay = (Math.random() * 6).toFixed(2) + "s";
+      st.style.animationDuration = (3 + Math.random() * 5).toFixed(2) + "s";
+      sky.appendChild(st);
+    }
+  })();
+  restore();
+  applyLock(); // starts locked; also performs the initial render
+})();
+</script>
+</body>
+</html>
