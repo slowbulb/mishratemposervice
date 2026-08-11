@@ -1,6 +1,5 @@
 import { motion, useReducedMotion, useTransform, type MotionValue } from 'framer-motion'
-import Placeholder from '../objects/Placeholder'
-import { getObjectVisual } from '../objects/registry'
+import { getObjectComponent } from '../objects/registry'
 import type { SceneNode } from './sceneData'
 
 const PARALLAX_RANGE = 220 // px of extra travel for the nearest node
@@ -13,7 +12,7 @@ interface NodeProps {
 
 export default function Node({ node, fieldWidth, scrollYProgress }: NodeProps) {
   const reduceMotion = useReducedMotion()
-  const visual = getObjectVisual(node.objectKey)
+  const ObjectComponent = getObjectComponent(node.objectKey)
 
   const range = reduceMotion ? 0 : PARALLAX_RANGE * (1 - node.depth)
   const parallaxY = useTransform(scrollYProgress, [0, 1], [0, -range])
@@ -37,7 +36,7 @@ export default function Node({ node, fieldWidth, scrollYProgress }: NodeProps) {
     >
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
         <div style={{ transform: `scale(${scale})` }}>
-          <Placeholder color={visual.color} glow={visual.glow} size={size} seed={node.index} />
+          <ObjectComponent size={size} seed={node.index} />
         </div>
         <div className="node-label">
           <span className="node-no">{String(node.index + 1).padStart(2, '0')}</span>
