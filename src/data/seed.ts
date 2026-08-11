@@ -7,7 +7,7 @@ export interface SeedTrack {
 }
 
 export const SEED_ALBUM = {
-  title: 'Untitled Concept Album — Act I',
+  title: 'LITTERBOX GOLD',
   artist: 'Mishra Tempo Service',
 }
 
