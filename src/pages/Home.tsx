@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import Starfield from '../components/Starfield'
 import FlightField from '../scene/FlightField'
 import { SEED_ALBUM } from '../data/seed'
 import './Home.css'
@@ -7,7 +6,6 @@ import './Home.css'
 export default function Home() {
   return (
     <div className="home-app">
-      <Starfield />
       <header className="home-topbar">
         <div className="home-topbar-text">
           <span className="eyebrow">{SEED_ALBUM.artist}</span>

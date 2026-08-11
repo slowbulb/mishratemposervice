@@ -1,0 +1,40 @@
+.blackhole-wrap {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.blackhole-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, #000 45%, rgba(0, 0, 0, 0) 72%);
+}
+
+.blackhole-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, #f2c94c, #7fd1e8, transparent 70%);
+  filter: blur(3px);
+  animation: blackhole-spin 3.5s linear infinite;
+  mask: radial-gradient(circle, transparent 55%, black 58%, black 62%, transparent 66%);
+  -webkit-mask: radial-gradient(circle, transparent 55%, black 58%, black 62%, transparent 66%);
+}
+
+@keyframes blackhole-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blackhole-ring {
+    animation: none;
+  }
+}

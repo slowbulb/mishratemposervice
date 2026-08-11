@@ -9,6 +9,10 @@ import { useFlightNav } from './useFlightNav'
 import { useAudioPlayer } from '../audio/useAudioPlayer'
 import NavButtons from '../components/NavButtons'
 import NowPlaying from '../components/NowPlaying'
+import Starfield from '../components/Starfield'
+import { TRACK_INTERACTIONS } from '../interaction/interactionConfig'
+import { usePointerPosition } from '../interaction/usePointerPosition'
+import BlackHoleCore from '../interaction/BlackHoleCore'
 import './FlightField.css'
 
 const SWIPE_THRESHOLD = 50
@@ -34,6 +38,44 @@ export default function FlightField() {
 
   const { currentIndex, currentNode, goNext, goPrev, canGoNext, canGoPrev } = useFlightNav()
   const audio = useAudioPlayer(currentNode.audioUrl)
+
+  const interaction = TRACK_INTERACTIONS[currentNode.id]
+  const interactionActive = Boolean(interaction) && audio.isPlaying
+  const pointer = usePointerPosition(interactionActive)
+
+  // A black hole gets a fresh hidden target (screen-space, near viewport
+  // center where the current node always sits) each time you land on its
+  // track — found by moving the pointer near it, not shown otherwise.
+  const [blackHoleTarget, setBlackHoleTarget] = useState<{ x: number; y: number } | null>(null)
+  useEffect(() => {
+    if (interaction?.kind === 'blackhole') {
+      const angle = Math.random() * Math.PI * 2
+      const dist = 90 + Math.random() * 140
+      setBlackHoleTarget({
+        x: window.innerWidth / 2 + Math.cos(angle) * dist,
+        y: window.innerHeight / 2 + Math.sin(angle) * dist,
+      })
+    } else {
+      setBlackHoleTarget(null)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex])
+
+  let spotlight: { x: number; y: number; radius: number } | null = null
+  let blackHole: { x: number; y: number; captureRadius: number; proximity: number } | null = null
+
+  if (interactionActive && pointer) {
+    if (interaction.kind === 'twinkle') {
+      spotlight = { x: pointer.x, y: pointer.y, radius: interaction.radius }
+    } else if (interaction.kind === 'blackhole' && blackHoleTarget) {
+      const dist = Math.hypot(pointer.x - blackHoleTarget.x, pointer.y - blackHoleTarget.y)
+      const influenceRadius = interaction.captureRadius * 2.6
+      const proximity = clamp(1 - dist / influenceRadius, 0, 1)
+      if (proximity > 0) {
+        blackHole = { x: blackHoleTarget.x, y: blackHoleTarget.y, captureRadius: interaction.captureRadius, proximity }
+      }
+    }
+  }
 
   // Native (non-passive) listeners are attached once; refs keep them reading
   // fresh values without needing to re-attach on every render.
@@ -143,6 +185,8 @@ export default function FlightField() {
 
   return (
     <div ref={viewportRef} className="flight-viewport">
+      <Starfield spotlight={spotlight} blackHole={blackHole} />
+
       <motion.div
         className="flight-world"
         style={{ width: size.width, height: SCENE_HEIGHT }}
@@ -168,6 +212,8 @@ export default function FlightField() {
           )}
         </motion.div>
       </motion.div>
+
+      {blackHole && <BlackHoleCore x={blackHole.x} y={blackHole.y} proximity={blackHole.proximity} />}
 
       <div className="flight-rickshaw">
         <motion.div animate={{ rotate: currentNode.headingDeg }} transition={CAMERA_TRANSITION}>
