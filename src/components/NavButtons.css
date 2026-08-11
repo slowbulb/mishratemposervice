@@ -1,0 +1,38 @@
+.nav-buttons {
+  position: fixed;
+  right: 20px;
+  bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 20;
+}
+
+.nav-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-family: var(--mono);
+  font-size: 18px;
+  border: 1px solid rgba(146, 166, 255, 0.4);
+  background: rgba(15, 20, 48, 0.75);
+  color: var(--ink);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  transition: border-color 120ms, color 120ms, background 120ms;
+}
+
+.nav-btn:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.nav-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.nav-btn:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}

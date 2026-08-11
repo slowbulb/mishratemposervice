@@ -1,0 +1,14 @@
+.waypoint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.waypoint-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(242, 201, 76, 0.5);
+  box-shadow: 0 0 14px rgba(242, 201, 76, 0.5);
+}

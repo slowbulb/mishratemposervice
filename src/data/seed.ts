@@ -3,6 +3,7 @@ export interface SeedTrack {
   title: string
   prose: string
   objectKey?: string
+  audioUrl?: string
 }
 
 export const SEED_ALBUM = {

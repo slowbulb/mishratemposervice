@@ -1,28 +1,24 @@
 import { Link } from 'react-router-dom'
 import Starfield from '../components/Starfield'
-import Field from '../scene/Field'
-import { SEED_ALBUM, SEED_TRACKS } from '../data/seed'
+import FlightField from '../scene/FlightField'
+import { SEED_ALBUM } from '../data/seed'
 import './Home.css'
 
 export default function Home() {
   return (
-    <div className="home">
+    <div className="home-app">
       <Starfield />
-      <header className="home-header">
-        <div className="eyebrow">
-          Flight log · {SEED_TRACKS.length} tracks
+      <header className="home-topbar">
+        <div className="home-topbar-text">
+          <span className="eyebrow">{SEED_ALBUM.artist}</span>
+          <span className="mini-title">{SEED_ALBUM.title}</span>
         </div>
-        <h1 className="album-title">{SEED_ALBUM.title}</h1>
-        <div className="artist">{SEED_ALBUM.artist}</div>
-      </header>
-
-      <Field />
-
-      <footer className="home-footer">
         <Link className="btn" to="/login">
           Owner login
         </Link>
-      </footer>
+      </header>
+
+      <FlightField />
     </div>
   )
 }

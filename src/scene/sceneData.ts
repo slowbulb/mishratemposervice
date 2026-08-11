@@ -8,8 +8,8 @@ export interface SceneNode {
   title: string
   x: number // 0..1, horizontal position within the field
   y: number // px, natural vertical position along the flight path
-  depth: number // 0 (near/large/fast) .. 1 (far/small/slow)
   objectKey: string
+  audioUrl?: string
   headingDeg: number // rotation so the object points toward the next node
   effect?: EnvironmentEffect
 }
@@ -23,9 +23,8 @@ export const BOTTOM_PADDING = 320
 // the real responsive field width — it's a stylistic heading, not layout.
 const HEADING_REFERENCE_WIDTH = 640
 
-// Deterministic depth + horizontal wander per node, hand-tuned for
-// variety rather than derived.
-const DEPTHS = [0.15, 0.5, 0.8, 0.35, 0.65, 0.2, 0.55, 0.1]
+// Deterministic horizontal wander per node, hand-tuned for variety
+// rather than derived.
 const X_POS = [0.6, 0.3, 0.68, 0.25, 0.55, 0.35, 0.65, 0.4]
 
 const EFFECTS: Record<string, EnvironmentEffect> = {
@@ -46,8 +45,8 @@ const rawNodes = SEED_TRACKS.map((track, i) => ({
   title: track.title,
   x: X_POS[i % X_POS.length],
   y: TOP_PADDING + i * SECTION_HEIGHT,
-  depth: DEPTHS[i % DEPTHS.length],
   objectKey: track.objectKey ?? '_default',
+  audioUrl: track.audioUrl,
   effect: EFFECTS[track.id],
 }))
 
