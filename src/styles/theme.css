@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --space: #050512;            /* deep space */
+  --space-2: #0c1030;          /* nebula depth */
+  --panel: rgba(15, 20, 48, 0.72);        /* card hull glass */
+  --panel-edge: rgba(146, 166, 255, 0.26);
+  --ink: #e8ecff;              /* starlight text */
+  --ink-soft: #a9b3d9;
+  --gold: #f2c94c;             /* star gold */
+  --teal: #7fd1e8;             /* comet teal */
+  --violet: #8e7cc3;
+  --rickshaw-red: #b5384a;     /* livery red, from reference art */
+  --hairline: rgba(146, 166, 255, 0.16);
+
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'Instrument Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    radial-gradient(900px 520px at 78% -8%, rgba(142, 124, 195, 0.22), transparent 62%),
+    radial-gradient(760px 480px at 12% 108%, rgba(46, 127, 143, 0.2), transparent 60%),
+    radial-gradient(1200px 700px at 50% 30%, var(--space-2), var(--space) 75%);
+  background-attachment: fixed;
+  font-family: var(--sans);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
