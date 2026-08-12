@@ -52,7 +52,6 @@
   align-items: center;
   justify-content: flex-end;
   padding-right: 16px;
-  transition: height 200ms ease-out;
 }
 
 .timeline-ly {
@@ -65,7 +64,6 @@
   border-radius: 999px;
   border: 1px solid var(--hairline);
   white-space: nowrap;
-  transition: opacity 200ms ease-out;
 }
 
 .timeline-row {

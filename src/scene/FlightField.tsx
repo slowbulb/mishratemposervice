@@ -1,10 +1,10 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import FlightPath from './FlightPath'
 import EnvironmentLayer from './EnvironmentLayer'
 import WaypointMarker from './WaypointMarker'
 import Rickshaw from '../objects/Rickshaw'
-import { BOTTOM_PADDING, SCENE_HEIGHT, SCENE_NODES, TOP_PADDING } from './sceneData'
+import { SCENE_HEIGHT, SCENE_NODES } from './sceneData'
 import { useFlightNav } from './useFlightNav'
 import { useAudioPlayer } from '../audio/useAudioPlayer'
 import NavButtons from '../components/NavButtons'
@@ -20,11 +20,8 @@ import './FlightField.css'
 const SWIPE_THRESHOLD = 50
 const WHEEL_NAV_THRESHOLD = 24
 const WHEEL_NAV_COOLDOWN = 650
+const ZOOM_MIN = 0.6
 const ZOOM_MAX = 2
-const OVERVIEW_MARGIN = 90
-const PATH_SPAN = SCENE_HEIGHT - TOP_PADDING - BOTTOM_PADDING
-const RICKSHAW_SIZE = 140
-const RICKSHAW_MIN_SIZE = 46
 const CAMERA_TRANSITION = { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const }
 const ZOOM_TRANSITION = { duration: 0.2, ease: 'easeOut' as const }
 
@@ -43,15 +40,6 @@ export default function FlightField() {
 
   const { currentIndex, currentNode, goNext, goPrev, goTo, canGoNext, canGoPrev } = useFlightNav()
   const audio = useAudioPlayer(currentNode.audioUrl)
-
-  // The lowest zoom the pinch/scroll gesture can reach — chosen so that,
-  // pivoting around whichever node is current, the farthest end of the
-  // whole path still fits inside the viewport. Guarantees "zoom all the
-  // way out" always reveals the entire journey, not just a fixed 60%.
-  const zoomMin = useMemo(() => {
-    const available = size.height / 2 - OVERVIEW_MARGIN
-    return clamp(available / PATH_SPAN, 0.04, 0.6)
-  }, [size.height])
 
   const interaction = TRACK_INTERACTIONS[currentNode.id]
   const interactionActive = Boolean(interaction) && audio.isPlaying
@@ -84,11 +72,9 @@ export default function FlightField() {
   const goNextRef = useRef(goNext)
   const goPrevRef = useRef(goPrev)
   const zoomRef = useRef(zoom)
-  const zoomMinRef = useRef(zoomMin)
   goNextRef.current = goNext
   goPrevRef.current = goPrev
   zoomRef.current = zoom
-  zoomMinRef.current = zoomMin
 
   useLayoutEffect(() => {
     const el = viewportRef.current
@@ -100,10 +86,6 @@ export default function FlightField() {
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
-
-  useEffect(() => {
-    setZoom((z) => Math.max(z, zoomMin))
-  }, [zoomMin])
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -127,7 +109,7 @@ export default function FlightField() {
       e.preventDefault()
       // Mac trackpad pinch arrives as a wheel event with ctrlKey set.
       if (e.ctrlKey) {
-        setZoom((z) => clamp(z - e.deltaY * 0.01, zoomMinRef.current, ZOOM_MAX))
+        setZoom((z) => clamp(z - e.deltaY * 0.01, ZOOM_MIN, ZOOM_MAX))
         return
       }
       if (wheelLocked) return
@@ -162,7 +144,7 @@ export default function FlightField() {
         e.preventDefault()
         const dist = touchDistance(e.touches[0], e.touches[1])
         const ratio = dist / pinchStartDist
-        setZoom(clamp(pinchStartZoom * ratio, zoomMinRef.current, ZOOM_MAX))
+        setZoom(clamp(pinchStartZoom * ratio, ZOOM_MIN, ZOOM_MAX))
       }
     }
 
@@ -232,11 +214,11 @@ export default function FlightField() {
           animate={{ rotate: landed ? 0 : currentNode.headingDeg, y: landed ? 120 : 0 }}
           transition={CAMERA_TRANSITION}
         >
-          <Rickshaw size={Math.max(RICKSHAW_MIN_SIZE, Math.round(RICKSHAW_SIZE * zoom))} seed={currentIndex} />
+          <Rickshaw size={140} seed={currentIndex} />
         </motion.div>
       </div>
 
-      <Timeline nodes={SCENE_NODES} currentIndex={currentIndex} onSelect={goTo} zoom={zoom} zoomMin={zoomMin} />
+      <Timeline nodes={SCENE_NODES} currentIndex={currentIndex} onSelect={goTo} />
       <NowPlaying node={currentNode} total={SCENE_NODES.length} audio={audio} />
       <NavButtons onUp={goPrev} onDown={goNext} canUp={canGoPrev} canDown={canGoNext} />
     </div>
