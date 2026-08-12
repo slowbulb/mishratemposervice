@@ -12,8 +12,13 @@
   <!-- body -->
   <path d="M13 44 C13 34, 15 27, 22 26 L44 26 C48 26, 50 30, 50 34 L50 42 C50 44, 49 45, 47 45 L15 45 C14 45, 13 44, 13 44 Z"
         fill="#B5384A" stroke="#14102A" stroke-width="1.5"/>
-  <!-- window -->
+  <!-- window, with the ghost passenger reclining inside -->
   <rect x="16" y="30" width="13" height="12" rx="3" fill="#0C1030"/>
+  <g stroke="#7FD1E8" stroke-width="1" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="20.5" cy="34" r="1.7"/>
+    <path d="M20.5 35.7 L22 40 L27 41.5"/>
+    <path d="M22 40 L18.5 41.5"/>
+  </g>
   <!-- windshield -->
   <rect x="31" y="30" width="16" height="12" rx="2" fill="#14102A" stroke="#F2C94C" stroke-width="1.2"/>
   <circle cx="39" cy="35" r="3" fill="#E8ECFF"/>
