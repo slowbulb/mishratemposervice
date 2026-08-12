@@ -7,9 +7,10 @@
     <title>LITTERBOX GOLD — Mishra Tempo Service</title>
     <meta
       name="description"
-      content="Litterbox Gold by Mishra Tempo Service: an interstellar journey to recover the lost giant, the last of it's kind."
+      content="Mishra Tempo Service is an electronic alt-pop duo formed by Parijat Mishra and Animesh Mishra. Litterbox Gold: an interstellar journey to recover the lost giant, the last of it's kind."
     />
     <meta name="author" content="Mishra Tempo Service" />
+    <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#050512" />
     <link rel="canonical" href="https://mishratemposervice.vercel.app/" />
 
@@ -23,7 +24,7 @@
     <meta property="og:title" content="LITTERBOX GOLD — Mishra Tempo Service" />
     <meta
       property="og:description"
-      content="Litterbox Gold by Mishra Tempo Service: an interstellar journey to recover the lost giant, the last of it's kind."
+      content="Mishra Tempo Service is an electronic alt-pop duo formed by Parijat Mishra and Animesh Mishra. Litterbox Gold: an interstellar journey to recover the lost giant, the last of it's kind."
     />
     <meta property="og:url" content="https://mishratemposervice.vercel.app/" />
     <meta property="og:image" content="https://mishratemposervice.vercel.app/og-image.png" />
@@ -31,16 +32,71 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="A flying auto-rickshaw adrift in deep space, lettered मिश्रा टेम्पो सर्विस." />
     <meta property="og:locale" content="en_US" />
+    <meta property="music:musician" content="Parijat Mishra" />
+    <meta property="music:musician" content="Animesh Mishra" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="LITTERBOX GOLD — Mishra Tempo Service" />
     <meta
       name="twitter:description"
-      content="Litterbox Gold by Mishra Tempo Service: an interstellar journey to recover the lost giant, the last of it's kind."
+      content="Mishra Tempo Service is an electronic alt-pop duo formed by Parijat Mishra and Animesh Mishra. Litterbox Gold: an interstellar journey to recover the lost giant, the last of it's kind."
     />
     <meta name="twitter:image" content="https://mishratemposervice.vercel.app/og-image.png" />
     <meta name="twitter:image:alt" content="A flying auto-rickshaw adrift in deep space, lettered मिश्रा टेम्पो सर्विस." />
+
+    <!-- Structured data: band, members, album + tracklist, so Google
+         can resolve "Mishra Tempo Service" as a music entity -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "MusicGroup",
+            "@id": "https://mishratemposervice.vercel.app/#band",
+            "name": "Mishra Tempo Service",
+            "alternateName": "मिश्रा टेम्पो सर्विस",
+            "genre": ["Electronic", "Alt-Pop", "Electronic Alt-Pop"],
+            "url": "https://mishratemposervice.vercel.app/",
+            "image": "https://mishratemposervice.vercel.app/og-image.png",
+            "description": "Mishra Tempo Service is an electronic alt-pop duo formed by Parijat Mishra and Animesh Mishra.",
+            "member": [
+              { "@type": "Person", "name": "Parijat Mishra" },
+              { "@type": "Person", "name": "Animesh Mishra" }
+            ],
+            "sameAs": [
+              "https://www.instagram.com/mishratemposervice",
+              "https://soundcloud.com/mishratemposervice"
+            ]
+          },
+          {
+            "@type": "MusicAlbum",
+            "@id": "https://mishratemposervice.vercel.app/#album",
+            "name": "LITTERBOX GOLD",
+            "byArtist": { "@id": "https://mishratemposervice.vercel.app/#band" },
+            "url": "https://mishratemposervice.vercel.app/",
+            "image": "https://mishratemposervice.vercel.app/og-image.png",
+            "track": [
+              { "@type": "MusicRecording", "position": 1, "name": "Space Supplies" },
+              { "@type": "MusicRecording", "position": 2, "name": "U Turn" },
+              { "@type": "MusicRecording", "position": 3, "name": "Goodbye" },
+              { "@type": "MusicRecording", "position": 4, "name": "This Is April" },
+              { "@type": "MusicRecording", "position": 5, "name": "The End Is Near" },
+              { "@type": "MusicRecording", "position": 6, "name": "F*****g Dying" },
+              { "@type": "MusicRecording", "position": 7, "name": "Escape Sequence" },
+              { "@type": "MusicRecording", "position": 8, "name": "Re Entry / Homecoming" }
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://mishratemposervice.vercel.app/#website",
+            "url": "https://mishratemposervice.vercel.app/",
+            "name": "Mishra Tempo Service",
+            "publisher": { "@id": "https://mishratemposervice.vercel.app/#band" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

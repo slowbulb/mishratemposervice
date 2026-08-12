@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mishratemposervice.vercel.app/sitemap.xml

@@ -12,18 +12,11 @@
   right: 0;
   z-index: 30;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
   padding: 18px 22px;
   background: linear-gradient(180deg, rgba(5, 5, 18, 0.65), transparent);
-}
-
-.home-topbar-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
 }
 
 .eyebrow {
@@ -32,16 +25,28 @@
   letter-spacing: 0.2em;
   color: var(--teal);
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.mini-title {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 15px;
+.home-topbar-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.album-title {
+  display: inline-block;
+  font-family: var(--mono);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--ink);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-align: justify;
+  text-align-last: justify;
 }
 
 .btn {
