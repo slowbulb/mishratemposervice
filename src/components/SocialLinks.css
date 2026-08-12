@@ -1,0 +1,32 @@
+.social-links {
+  position: fixed;
+  left: 20px;
+  bottom: 28px;
+  z-index: 20;
+  display: flex;
+  gap: 10px;
+}
+
+.social-link {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(146, 166, 255, 0.4);
+  background: rgba(15, 20, 48, 0.75);
+  color: var(--ink-soft);
+  backdrop-filter: blur(4px);
+  transition: border-color 120ms, color 120ms, background 120ms;
+}
+
+.social-link:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.social-link:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}

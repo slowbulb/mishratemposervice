@@ -6,7 +6,7 @@ interface RickshawProps {
 }
 
 // Layered SVG rickshaw, matching the band's reference art: maroon/red
-// tin body, gold roof lights, "MISHRA" roof sign, "TEMPO SERVICE"
+// tin body, gold roof lights, मिश्रा roof sign, टेम्पो / सर्विस
 // windshield banner, and a star-outline ghost passenger in the open
 // side cutout. Layers animate independently (wheels spin, body bobs,
 // trail streams, lights pulse) per the parallax-rig pattern in the
@@ -107,9 +107,9 @@ export default function Rickshaw({ size, seed = 0 }: RickshawProps) {
         <path d="M140 90 C150 66, 300 66, 316 90 L316 100 L140 100 Z" fill="#7a2536" stroke="#14102a" strokeWidth="3" />
 
         {/* roof sign */}
-        <path d="M196 58 C196 46, 268 46, 268 58 L268 70 L196 70 Z" fill="#0c1030" stroke="#f2c94c" strokeWidth="2" />
-        <text x="232" y="65" textAnchor="middle" fontFamily="'IBM Plex Mono', monospace" fontSize="13" fill="#f2c94c" fontWeight="600">
-          MISHRA
+        <path d="M188 56 C188 44, 276 44, 276 56 L276 70 L188 70 Z" fill="#0c1030" stroke="#f2c94c" strokeWidth="2" />
+        <text x="232" y="66" textAnchor="middle" fontFamily="'Noto Sans Devanagari', system-ui, sans-serif" fontSize="14" fill="#f2c94c" fontWeight="600">
+          मिश्रा
         </text>
 
         {/* roof lights */}
@@ -132,12 +132,12 @@ export default function Rickshaw({ size, seed = 0 }: RickshawProps) {
         <path d="M234 168 C234 150, 266 150, 266 168 Z" fill="#8e7cc3" />
 
         {/* tempo service banner */}
-        <rect x="200" y="150" width="102" height="34" rx="4" fill="#0c1030" stroke="rgba(242,201,76,0.4)" strokeWidth="1.5" />
-        <text x="251" y="164" textAnchor="middle" fontFamily="'IBM Plex Mono', monospace" fontSize="11" fill="#f2c94c" fontWeight="600">
-          TEMPO
+        <rect x="196" y="148" width="110" height="36" rx="4" fill="#0c1030" stroke="rgba(242,201,76,0.4)" strokeWidth="1.5" />
+        <text x="251" y="163" textAnchor="middle" fontFamily="'Noto Sans Devanagari', system-ui, sans-serif" fontSize="12" fill="#f2c94c" fontWeight="600">
+          टेम्पो
         </text>
-        <text x="251" y="178" textAnchor="middle" fontFamily="'IBM Plex Mono', monospace" fontSize="11" fill="#f2c94c" fontWeight="600">
-          SERVICE
+        <text x="251" y="179" textAnchor="middle" fontFamily="'Noto Sans Devanagari', system-ui, sans-serif" fontSize="12" fill="#f2c94c" fontWeight="600">
+          सर्विस
         </text>
 
         {/* dashboard idol glow */}

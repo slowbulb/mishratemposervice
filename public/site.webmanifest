@@ -1,0 +1,22 @@
+{
+  "name": "LITTERBOX GOLD — Mishra Tempo Service",
+  "short_name": "Litterbox Gold",
+  "description": "Litterbox Gold by Mishra Tempo Service: an interstellar journey to recover the lost giant, the last of it's kind.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050512",
+  "theme_color": "#050512",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

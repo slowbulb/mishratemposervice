@@ -67,6 +67,30 @@ export default function ForestLanding({ width }: ForestLandingProps) {
       />
 
       <svg width={w} height={SCENE_HEIGHT} style={{ position: 'absolute', inset: 0 }}>
+        <defs>
+          {/* moonlight bleeding off the giant's silhouette */}
+          <filter id="giant-moonglow" x="-25%" y="-25%" width="150%" height="150%">
+            <feGaussianBlur stdDeviation="6" result="glow" />
+            <feMerge>
+              <feMergeNode in="glow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          {/* ash-blue skin: catches moonlight on the upper edge, falls
+              away into near-darkness underneath so the body still sits
+              inside the night forest */}
+          <linearGradient id="giant-skin" x1="0" y1="0" x2="0.15" y2="1">
+            <stop offset="0%" stopColor="#6b7f96" />
+            <stop offset="22%" stopColor="#4a5c72" />
+            <stop offset="60%" stopColor="#2c3a4a" />
+            <stop offset="100%" stopColor="#1a2430" />
+          </linearGradient>
+          <linearGradient id="giant-skin-dark" x1="0" y1="0" x2="0.15" y2="1">
+            <stop offset="0%" stopColor="#3c4c5e" />
+            <stop offset="100%" stopColor="#151d27" />
+          </linearGradient>
+        </defs>
+
         {/* far tree row, behind the giant */}
         <g opacity={treeRows[0].opacity} filter={`blur(${treeRows[0].blur}px)`}>
           {treeRows[0].trees.map((t, i) => (
@@ -86,16 +110,16 @@ export default function ForestLanding({ width }: ForestLandingProps) {
           <path
             d={`M${cx - 430} 545 C ${cx - 400} 505, ${cx - 330} 500, ${cx - 300} 520
                 C ${cx - 270} 540, ${cx - 250} 545, ${cx - 235} 545 Z`}
-            fill="#0f332c"
+            fill="url(#giant-skin-dark)"
           />
           <path
             d={`M${cx - 330} 545 C ${cx - 300} 495, ${cx - 220} 486, ${cx - 170} 512
                 C ${cx - 140} 528, ${cx - 120} 542, ${cx - 110} 545 Z`}
-            fill="#123a31"
+            fill="url(#giant-skin-dark)"
           />
 
           {/* hip / haunch — a big rounded mass */}
-          <ellipse cx={cx - 150} cy={505} rx={125} ry={72} fill="#14423a" />
+          <ellipse cx={cx - 150} cy={505} rx={125} ry={72} fill="url(#giant-skin)" />
 
           {/* the long back: hip up to shoulder, the scene's main ridge */}
           <path
@@ -103,7 +127,7 @@ export default function ForestLanding({ width }: ForestLandingProps) {
                 C ${cx - 250} 470, ${cx - 190} 430, ${cx - 90} 410
                 C ${cx + 30} 386, ${cx + 120} 372, ${cx + 175} 352
                 L ${cx + 250} 545 Z`}
-            fill="#17493f"
+            fill="url(#giant-skin)"
           />
 
           {/* shoulder crest — the tallest point, clearing the conifers */}
@@ -112,14 +136,14 @@ export default function ForestLanding({ width }: ForestLandingProps) {
                 C ${cx + 120} 300, ${cx + 235} 292, ${cx + 262} 372
                 C ${cx + 274} 410, ${cx + 262} 470, ${cx + 252} 545
                 L ${cx + 150} 545 Z`}
-            fill="#1b5a4c"
+            fill="url(#giant-skin)"
           />
 
           {/* upper arm draping forward over the body, hand toward the trees */}
           <path
             d={`M${cx + 150} 392 C ${cx + 120} 452, ${cx + 30} 486, ${cx - 70} 500`}
             fill="none"
-            stroke="#123a31"
+            stroke="url(#giant-skin-dark)"
             strokeWidth="62"
             strokeLinecap="round"
           />
@@ -127,7 +151,7 @@ export default function ForestLanding({ width }: ForestLandingProps) {
           <path
             d={`M${cx - 70} 500 C ${cx - 130} 512, ${cx - 175} 528, ${cx - 200} 540`}
             fill="none"
-            stroke="#0f332c"
+            stroke="url(#giant-skin-dark)"
             strokeWidth="44"
             strokeLinecap="round"
           />
@@ -136,36 +160,53 @@ export default function ForestLanding({ width }: ForestLandingProps) {
           <path
             d={`M${cx + 235} 330 C ${cx + 262} 300, ${cx + 300} 300, ${cx + 318} 322`}
             fill="none"
-            stroke="#1b5a4c"
+            stroke="url(#giant-skin)"
             strokeWidth="52"
             strokeLinecap="round"
           />
-          <ellipse cx={cx + 352} cy={332} rx={62} ry={54} fill="#17493f" />
+          <ellipse cx={cx + 352} cy={332} rx={62} ry={54} fill="url(#giant-skin)" />
           {/* hair/moss mass on the back of the skull */}
           <path
             d={`M${cx + 312} 300 C ${cx + 330} 268, ${cx + 392} 268, ${cx + 408} 306
                 C ${cx + 418} 330, ${cx + 410} 352, ${cx + 400} 360
                 C ${cx + 380} 322, ${cx + 340} 306, ${cx + 312} 300 Z`}
-            fill="#0f332c"
+            fill="#2b3949"
           />
 
-          {/* rim light along the back ridge, moonlight catching the edge */}
-          <path
-            d={`M${cx - 250} 540
-                C ${cx - 250} 468, ${cx - 190} 428, ${cx - 90} 408
-                C ${cx + 30} 384, ${cx + 118} 370, ${cx + 168} 350`}
-            fill="none"
-            stroke="rgba(127,209,232,0.4)"
-            strokeWidth="3"
-            strokeLinecap="round"
-          />
-          <path
-            d={`M${cx + 100} 388 C ${cx + 124} 300, ${cx + 234} 293, ${cx + 260} 370`}
-            fill="none"
-            stroke="rgba(127,209,232,0.55)"
-            strokeWidth="3.5"
-            strokeLinecap="round"
-          />
+          {/* moonlight rim along every upward-facing edge: hip, back,
+              shoulder, skull — blurred so the light bleeds off the body */}
+          <g filter="url(#giant-moonglow)">
+            <path
+              d={`M${cx - 272} 520 C ${cx - 268} 462, ${cx - 220} 440, ${cx - 168} 434`}
+              fill="none"
+              stroke="rgba(170,200,232,0.34)"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            />
+            <path
+              d={`M${cx - 250} 540
+                  C ${cx - 250} 468, ${cx - 190} 428, ${cx - 90} 408
+                  C ${cx + 30} 384, ${cx + 118} 370, ${cx + 168} 350`}
+              fill="none"
+              stroke="rgba(190,216,244,0.5)"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            <path
+              d={`M${cx + 100} 388 C ${cx + 124} 300, ${cx + 234} 293, ${cx + 260} 368`}
+              fill="none"
+              stroke="rgba(214,232,255,0.68)"
+              strokeWidth="3.4"
+              strokeLinecap="round"
+            />
+            <path
+              d={`M${cx + 300} 296 C ${cx + 340} 276, ${cx + 396} 288, ${cx + 410} 322`}
+              fill="none"
+              stroke="rgba(190,216,244,0.48)"
+              strokeWidth="2.8"
+              strokeLinecap="round"
+            />
+          </g>
 
           {/* slow breathing motes rising off the back */}
           {!reduceMotion &&

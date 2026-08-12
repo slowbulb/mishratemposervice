@@ -66,7 +66,7 @@ export const SEED_TRACKS: SeedTrack[] = [
   },
   {
     id: 'trk-immigrant',
-    title: 'IMMIGRANT',
+    title: 'RE ENTRY / HOMECOMING',
     prose: '',
     objectKey: 'rickshaw',
     audioUrl: '/audio/IMMIGRANT.mp3',

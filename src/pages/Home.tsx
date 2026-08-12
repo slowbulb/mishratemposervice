@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import FlightField from '../scene/FlightField'
+import SocialLinks from '../components/SocialLinks'
 import { SEED_ALBUM } from '../data/seed'
 import './Home.css'
 
@@ -17,6 +18,7 @@ export default function Home() {
       </header>
 
       <FlightField />
+      <SocialLinks />
     </div>
   )
 }
