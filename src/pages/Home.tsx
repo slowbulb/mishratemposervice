@@ -25,18 +25,18 @@ export default function Home() {
   return (
     <div className="home-app">
       <header className="home-topbar">
-        <span className="eyebrow" ref={eyebrowRef}>
-          {SEED_ALBUM.artist}
-        </span>
-
-        <div className="home-topbar-right">
+        <div className="home-topbar-text">
+          <span className="eyebrow" ref={eyebrowRef}>
+            {SEED_ALBUM.artist}
+          </span>
           <span className="album-title" style={titleWidth ? { width: titleWidth } : undefined}>
             {SEED_ALBUM.title}
           </span>
-          <Link className="btn" to="/login">
-            Owner login
-          </Link>
         </div>
+
+        <Link className="btn" to="/login">
+          Owner login
+        </Link>
       </header>
 
       <FlightField />
