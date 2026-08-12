@@ -13,11 +13,19 @@ export function useFlightNav() {
     setCurrentIndex((i) => Math.max(0, i - 1))
   }, [])
 
+  const goTo = useCallback(
+    (index: number) => {
+      setCurrentIndex(Math.min(last, Math.max(0, index)))
+    },
+    [last],
+  )
+
   return {
     currentIndex,
     currentNode: SCENE_NODES[currentIndex],
     goNext,
     goPrev,
+    goTo,
     canGoNext: currentIndex < last,
     canGoPrev: currentIndex > 0,
   }

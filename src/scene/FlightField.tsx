@@ -9,6 +9,7 @@ import { useFlightNav } from './useFlightNav'
 import { useAudioPlayer } from '../audio/useAudioPlayer'
 import NavButtons from '../components/NavButtons'
 import NowPlaying from '../components/NowPlaying'
+import Timeline from '../components/Timeline'
 import Starfield from '../components/Starfield'
 import { TRACK_INTERACTIONS } from '../interaction/interactionConfig'
 import { usePointerPosition } from '../interaction/usePointerPosition'
@@ -37,7 +38,7 @@ export default function FlightField() {
   const [size, setSize] = useState({ width: 700, height: 800 })
   const [zoom, setZoom] = useState(1)
 
-  const { currentIndex, currentNode, goNext, goPrev, canGoNext, canGoPrev } = useFlightNav()
+  const { currentIndex, currentNode, goNext, goPrev, goTo, canGoNext, canGoPrev } = useFlightNav()
   const audio = useAudioPlayer(currentNode.audioUrl)
 
   const interaction = TRACK_INTERACTIONS[currentNode.id]
@@ -217,6 +218,7 @@ export default function FlightField() {
         </motion.div>
       </div>
 
+      <Timeline nodes={SCENE_NODES} currentIndex={currentIndex} onSelect={goTo} />
       <NowPlaying node={currentNode} total={SCENE_NODES.length} audio={audio} />
       <NavButtons onUp={goPrev} onDown={goNext} canUp={canGoPrev} canDown={canGoNext} />
     </div>
